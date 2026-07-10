@@ -1,0 +1,8 @@
+{
+  "U_bookggle": {
+    "path": "/mnt/ext1/applications/bookggle.app",
+    "title": "Bookggle",
+    "icon": "/mnt/ext1/applications/icons/bookggle.bmp",
+    "focused_icon": "/mnt/ext1/applications/icons/bookggle_f.bmp"
+  }
+}

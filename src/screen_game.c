@@ -32,9 +32,9 @@ void draw_hud(void)
 
     /* Top-right corner: two buttons, Quit (far corner) and Mode
        (just to its left). */
-    mode_btn_w = 80;
-    mode_btn_h = 28;
-    mode_btn_x = SW - mode_btn_w - 6;
+    mode_btn_w = 120;
+    mode_btn_h = 48;
+    mode_btn_x = SW - mode_btn_w - 8;
     mode_btn_y = 8;
     DrawRect(mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h, DGRAY);
     const char *mode_label = i18n_str(STR_BTN_MODE);
@@ -42,9 +42,9 @@ void draw_hud(void)
     DrawTextRect(mode_btn_x, mode_btn_y + 4,
                  mode_btn_w, mode_btn_h, mode_label, ALIGN_CENTER);
 
-    quit_btn_w = 80;
-    quit_btn_h = 28;
-    quit_btn_x = mode_btn_x - quit_btn_w - 10;
+    quit_btn_w = 120;
+    quit_btn_h = 48;
+    quit_btn_x = mode_btn_x - quit_btn_w - 16;
     quit_btn_y = 8;
     DrawRect(quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h, DGRAY);
     const char *quit_label = i18n_str(STR_BTN_QUIT);
