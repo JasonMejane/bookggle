@@ -15,9 +15,10 @@
 #include <stdio.h>
 #include <time.h>
 
-void on_timer_tick(int id) {
-    switch (game_timer_callback(id)) {
-
+void on_timer_tick(int id)
+{
+    switch (game_timer_callback(id))
+    {
     case TIMER_TICK_RUNNING:
         /* Only repaint the top HUD strip where the timer text lives.
            This avoids a full-screen redraw while still forcing an
@@ -32,11 +33,12 @@ void on_timer_tick(int id) {
         FullUpdate();
         break;
 
-    case TIMER_TICK_ENDED_SOLO: {
+    case TIMER_TICK_ENDED_SOLO:
+    {
         char msg[96];
         const char *fmt = (g.score > 1)
-            ? i18n_str(STR_SCORE_FINAL_PLURAL)
-            : i18n_str(STR_SCORE_FINAL_SINGULAR);
+                              ? i18n_str(STR_SCORE_FINAL_PLURAL)
+                              : i18n_str(STR_SCORE_FINAL_SINGULAR);
         snprintf(msg, sizeof(msg), fmt, g.score);
         Message(ICON_INFORMATION, i18n_str(STR_GAME_OVER_TITLE), msg, 5000);
         break;
@@ -44,10 +46,11 @@ void on_timer_tick(int id) {
     }
 }
 
-static int main_handler(int type, int par1, int par2) {
+static int main_handler(int type, int par1, int par2)
+{
 
-    switch (type) {
-
+    switch (type)
+    {
     case EVT_INIT:
         srand((unsigned int)time(NULL));
         fonts_load();
@@ -58,10 +61,18 @@ static int main_handler(int type, int par1, int par2) {
         break;
 
     case EVT_SHOW:
-        switch (cur_screen) {
-        case SCREEN_MODE_SELECT: draw_mode_select(); break;
-        case SCREEN_GAME:        draw_game();        break;
-        case SCREEN_MULTI_END:   draw_multi_end(); FullUpdate(); break;
+        switch (cur_screen)
+        {
+        case SCREEN_MODE_SELECT:
+            draw_mode_select();
+            break;
+        case SCREEN_GAME:
+            draw_game();
+            break;
+        case SCREEN_MULTI_END:
+            draw_multi_end();
+            FullUpdate();
+            break;
         }
         break;
 
@@ -80,11 +91,14 @@ static int main_handler(int type, int par1, int par2) {
     default:
         break;
     }
+
     return 0;
 }
 
-int main(int argc, char **argv) {
-    (void)argc; (void)argv;
+int main(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
     InkViewMain(main_handler);
     return 0;
 }

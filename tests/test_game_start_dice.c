@@ -12,25 +12,32 @@
 #include <time.h>
 
 /* timer.c needs this symbol to link; real version lives in src/main.c. */
-void on_timer_tick(int id) {
+void on_timer_tick(int id)
+{
     (void)game_timer_callback(id);
 }
 
-int main(void) {
+int main(void)
+{
     srand((unsigned)time(NULL));
     layout_compute();
 
     int total_runs = 200;
-    for (int run = 0; run < total_runs; run++) {
+    for (int run = 0; run < total_runs; run++)
+    {
         game_start(MODE_SOLO);
 
         int q = 0, z = 0;
-        for (int r = 0; r < g.board_size; r++) {
-            for (int c = 0; c < g.board_size; c++) {
+        for (int r = 0; r < g.board_size; r++)
+        {
+            for (int c = 0; c < g.board_size; c++)
+            {
                 char ch = g.grid[r][c];
                 assert(ch >= 'A' && ch <= 'Z');
-                if (ch == 'Q') q++;
-                if (ch == 'Z') z++;
+                if (ch == 'Q')
+                    q++;
+                if (ch == 'Z')
+                    z++;
             }
         }
         assert(q <= 1);
@@ -38,7 +45,8 @@ int main(void) {
     }
 
     printf("[OK] %d calls to game_start(MODE_SOLO): all grids valid "
-           "(A-Z letters, <=1 Q, <=1 Z) via dice_roll_grid.\n", total_runs);
-    printf("\n=== INTEGRATION TEST PASSED (1/1) ===\n");
+           "(A-Z letters, <=1 Q, <=1 Z) via dice_roll_grid.\n",
+           total_runs);
+    printf("=== INTEGRATION TESTS PASSED ===\n\n");
     return 0;
 }

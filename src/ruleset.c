@@ -11,10 +11,12 @@ extern const GameRuleset RULESET_FR_5X5;
 
 static const GameRuleset *g_active_ruleset = NULL;
 
-void ruleset_select(int board_size) {
+void ruleset_select(int board_size)
+{
     const char *lang = i18n_str(STR_LANG_CODE);
 
-    if (strcmp(lang, "fr") == 0) {
+    if (strcmp(lang, "fr") == 0)
+    {
         g_active_ruleset = (board_size == 5) ? &RULESET_FR_5X5 : &RULESET_FR_4X4;
         return;
     }
@@ -24,6 +26,7 @@ void ruleset_select(int board_size) {
     g_active_ruleset = (board_size == 5) ? &RULESET_EN_5X5 : &RULESET_EN_4X4;
 }
 
-const GameRuleset *ruleset_active(void) {
+const GameRuleset *ruleset_active(void)
+{
     return (g_active_ruleset != NULL) ? g_active_ruleset : &RULESET_EN_4X4;
 }

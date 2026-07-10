@@ -28,31 +28,31 @@ const GameRuleset RULESET_EN_5X5 = {
     .board_size = 5,
     .dice_count = 25,
     .dice = {
-        {'A','A','A','F','R','S'},  /*  1: AAAFRS */
-        {'A','A','E','E','E','E'},  /*  2: AAEEEE */
-        {'A','A','F','I','R','S'},  /*  3: AAFIRS */
-        {'A','D','E','N','N','N'},  /*  4: ADENNN */
-        {'A','E','E','E','E','M'},  /*  5: AEEEEM */
-        {'A','E','E','G','M','U'},  /*  6: AEEGMU */
-        {'A','E','G','M','N','N'},  /*  7: AEGMNN */
-        {'A','F','I','R','S','Y'},  /*  8: AFIRSY */
-        {'B','J','K','Q','X','Z'},  /*  9: BJKQXZ */
-        {'C','C','E','N','S','T'},  /* 10: CCENST */
-        {'C','E','I','I','L','T'},  /* 11: CEIILT */
-        {'C','E','I','L','P','T'},  /* 12: CEILPT */
-        {'C','E','I','P','S','T'},  /* 13: CEIPST */
-        {'D','D','H','N','O','T'},  /* 14: DDHNOT */
-        {'D','H','H','L','O','R'},  /* 15: DHHLOR */
-        {'D','H','L','N','O','R'},  /* 16: DHLNOR */
-        {'D','H','L','N','O','R'},  /* 17: DHLNOR (duplicate, verified) */
-        {'E','I','I','I','T','T'},  /* 18: EIIITT */
-        {'E','M','O','T','T','T'},  /* 19: EMOTTT */
-        {'E','N','S','S','S','U'},  /* 20: ENSSSU */
-        {'F','I','P','R','S','Y'},  /* 21: FIPRSY */
-        {'G','O','R','R','V','W'},  /* 22: GORRVW */
-        {'I','P','R','R','R','Y'},  /* 23: IPRRRY */
-        {'N','O','O','T','U','W'},  /* 24: NOOTUW */
-        {'O','O','O','T','T','U'},  /* 25: OOOTTU */
+        {'A', 'A', 'A', 'F', 'R', 'S'}, /*  1: AAAFRS */
+        {'A', 'A', 'E', 'E', 'E', 'E'}, /*  2: AAEEEE */
+        {'A', 'A', 'F', 'I', 'R', 'S'}, /*  3: AAFIRS */
+        {'A', 'D', 'E', 'N', 'N', 'N'}, /*  4: ADENNN */
+        {'A', 'E', 'E', 'E', 'E', 'M'}, /*  5: AEEEEM */
+        {'A', 'E', 'E', 'G', 'M', 'U'}, /*  6: AEEGMU */
+        {'A', 'E', 'G', 'M', 'N', 'N'}, /*  7: AEGMNN */
+        {'A', 'F', 'I', 'R', 'S', 'Y'}, /*  8: AFIRSY */
+        {'B', 'J', 'K', 'Q', 'X', 'Z'}, /*  9: BJKQXZ */
+        {'C', 'C', 'E', 'N', 'S', 'T'}, /* 10: CCENST */
+        {'C', 'E', 'I', 'I', 'L', 'T'}, /* 11: CEIILT */
+        {'C', 'E', 'I', 'L', 'P', 'T'}, /* 12: CEILPT */
+        {'C', 'E', 'I', 'P', 'S', 'T'}, /* 13: CEIPST */
+        {'D', 'D', 'H', 'N', 'O', 'T'}, /* 14: DDHNOT */
+        {'D', 'H', 'H', 'L', 'O', 'R'}, /* 15: DHHLOR */
+        {'D', 'H', 'L', 'N', 'O', 'R'}, /* 16: DHLNOR */
+        {'D', 'H', 'L', 'N', 'O', 'R'}, /* 17: DHLNOR (duplicate, verified) */
+        {'E', 'I', 'I', 'I', 'T', 'T'}, /* 18: EIIITT */
+        {'E', 'M', 'O', 'T', 'T', 'T'}, /* 19: EMOTTT */
+        {'E', 'N', 'S', 'S', 'S', 'U'}, /* 20: ENSSSU */
+        {'F', 'I', 'P', 'R', 'S', 'Y'}, /* 21: FIPRSY */
+        {'G', 'O', 'R', 'R', 'V', 'W'}, /* 22: GORRVW */
+        {'I', 'P', 'R', 'R', 'R', 'Y'}, /* 23: IPRRRY */
+        {'N', 'O', 'O', 'T', 'U', 'W'}, /* 24: NOOTUW */
+        {'O', 'O', 'O', 'T', 'T', 'U'}, /* 25: OOOTTU */
     },
     .has_qu_digraph = 1,
     .min_word_len = 4,

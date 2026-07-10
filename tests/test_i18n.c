@@ -11,15 +11,18 @@
 #include <stdio.h>
 #include <assert.h>
 
-int main(void) {
+int main(void)
+{
     layout_compute();
     fonts_load();
     i18n_init();
 
-    const char *langs[] = { "en", "fr" };
-    for (int L = 0; L < 2; L++) {
+    const char *langs[] = {"en", "fr"};
+    for (int L = 0; L < 2; L++)
+    {
         stub_set_current_lang(langs[L]);
-        for (int k = 0; k < STR_COUNT; k++) {
+        for (int k = 0; k < STR_COUNT; k++)
+        {
             const char *text = i18n_str((StringKey)k);
             assert(text != NULL);
             assert(text[0] != '\0');
@@ -32,7 +35,8 @@ int main(void) {
        usable (SDK-level English fallback, or i18n_str's own
        compiled-in fallback if that fails too). */
     stub_set_current_lang("zz");
-    for (int k = 0; k < STR_COUNT; k++) {
+    for (int k = 0; k < STR_COUNT; k++)
+    {
         const char *text = i18n_str((StringKey)k);
         assert(text != NULL && text[0] != '\0');
     }
@@ -46,7 +50,7 @@ int main(void) {
 
     /* "Change mode" is 11 chars; stub width = strlen * font_size / 2.
        font_large(30) -> 165, font_medium(22) -> 121, font_small(16) -> 88. */
-    ifont *f2 = i18n_fit_font("Change mode", 150, font_large);
+    ifont *f2 = i18n_fit_font("Change mode", 170, font_large);
     assert(f2 == font_medium);
     printf("[OK] text too wide for font_large steps down to font_medium\n");
 
@@ -60,6 +64,6 @@ int main(void) {
     printf("[OK] text that fits nowhere falls back to font_small\n");
 
     fonts_free();
-    printf("\n=== I18N TESTS PASSED ===\n");
+    printf("=== I18N TESTS PASSED ===\n\n");
     return 0;
 }

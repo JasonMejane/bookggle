@@ -3,12 +3,12 @@
 #include "game_state.h"
 
 GameState g;
-Screen    cur_screen = SCREEN_MODE_SELECT;
+Screen cur_screen = SCREEN_MODE_SELECT;
 
-ifont *font_title  = NULL;
-ifont *font_large  = NULL;
+ifont *font_title = NULL;
+ifont *font_large = NULL;
 ifont *font_medium = NULL;
-ifont *font_small  = NULL;
+ifont *font_small = NULL;
 
 int SW, SH;
 int CELL_SIZE, GRID_X, GRID_Y;

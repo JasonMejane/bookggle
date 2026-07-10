@@ -3,10 +3,11 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-typedef enum {
-    TIMER_TICK_RUNNING,
-    TIMER_TICK_ENDED_SOLO,
-    TIMER_TICK_ENDED_MULTI
+typedef enum
+{
+   TIMER_TICK_RUNNING,
+   TIMER_TICK_ENDED_SOLO,
+   TIMER_TICK_ENDED_MULTI
 } TimerTickResult;
 
 /* Starts the 1-tick-per-second timer. */

@@ -10,43 +10,49 @@
    compile-time constant -- arrays are sized for the largest
    supported board (5x5) and only the active board_size x board_size
    portion is used. See docs/board_size_5x5_plan.md. */
-#define MAX_BOARD_SIZE   5
-#define MAX_DICE_COUNT   (MAX_BOARD_SIZE * MAX_BOARD_SIZE)  /* 25 */
+#define MAX_BOARD_SIZE 5
+#define MAX_DICE_COUNT (MAX_BOARD_SIZE * MAX_BOARD_SIZE) /* 25 */
 #define DEFAULT_BOARD_SIZE 4
 
-#define MAX_WORD_LEN   64   /* 25 cells * 2 chars (QU) + '\0', rounded up */
-#define MAX_WORDS      200
-#define MIN_WORD_LEN   3    /* compiled-in default; rulesets carry their own */
-#define TIMER_SECONDS       180   /* 3:00 -- default and one of two options */
-#define TIMER_SECONDS_SHORT 90    /* 1:30 -- the other option */
+#define MAX_WORD_LEN 64 /* 25 cells * 2 chars (QU) + '\0', rounded up */
+#define MAX_WORDS 200
+#define MIN_WORD_LEN 3         /* compiled-in default; rulesets carry their own */
+#define TIMER_SECONDS 180      /* 3:00 -- default and one of two options */
+#define TIMER_SECONDS_SHORT 90 /* 1:30 -- the other option */
 
-typedef enum { MODE_SOLO = 0, MODE_MULTI = 1 } GameMode;
+typedef enum
+{
+   MODE_SOLO = 0,
+   MODE_MULTI = 1
+} GameMode;
 #define DEFAULT_MODE MODE_SOLO
 
-typedef enum {
-    SCREEN_MODE_SELECT,
-    SCREEN_GAME,
-    SCREEN_MULTI_END
+typedef enum
+{
+   SCREEN_MODE_SELECT,
+   SCREEN_GAME,
+   SCREEN_MULTI_END
 } Screen;
 
-typedef struct {
-    char     grid[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
-    int      selected[MAX_DICE_COUNT];
-    int      board_size;   /* 4 or 5, set by game_start() */
-    int      sel_count;
-    char     current_word[MAX_WORD_LEN];
-    char     found_words[MAX_WORDS][MAX_WORD_LEN];
-    int      word_count;
-    int      score;
-    int      time_left;
-    int      game_over;
-    int      paused;   /* grid hidden, timer frozen; see timer.c/game_logic.c */
-    GameMode mode;
+typedef struct
+{
+   char grid[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+   int selected[MAX_DICE_COUNT];
+   int board_size; /* 4 or 5, set by game_start() */
+   int sel_count;
+   char current_word[MAX_WORD_LEN];
+   char found_words[MAX_WORDS][MAX_WORD_LEN];
+   int word_count;
+   int score;
+   int time_left;
+   int game_over;
+   int paused; /* grid hidden, timer frozen; see timer.c/game_logic.c */
+   GameMode mode;
 } GameState;
 
 /* Defined once in game_state.c */
 extern GameState g;
-extern Screen    cur_screen;
+extern Screen cur_screen;
 
 extern ifont *font_title;
 extern ifont *font_large;

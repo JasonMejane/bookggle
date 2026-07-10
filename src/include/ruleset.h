@@ -11,15 +11,16 @@
 #define RULESET_H
 
 #include "game_state.h" /* MAX_DICE_COUNT */
-#include "dice.h"        /* DICE_FACES */
+#include "dice.h"       /* DICE_FACES */
 
-typedef struct {
-    const char lang_code[8];
-    int        board_size;                        /* 4 or 5 */
-    int        dice_count;                         /* board_size^2, <= MAX_DICE_COUNT */
-    const char dice[MAX_DICE_COUNT][DICE_FACES];    /* only [0..dice_count) used */
-    int        has_qu_digraph;
-    int        min_word_len;
+typedef struct
+{
+   const char lang_code[8];
+   int board_size;                              /* 4 or 5 */
+   int dice_count;                              /* board_size^2, <= MAX_DICE_COUNT */
+   const char dice[MAX_DICE_COUNT][DICE_FACES]; /* only [0..dice_count) used */
+   int has_qu_digraph;
+   int min_word_len;
 } GameRuleset;
 
 /* Picks the active ruleset from the current device language (via

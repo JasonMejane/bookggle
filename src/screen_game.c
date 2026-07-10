@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void draw_hud(void) {
+void draw_hud(void)
+{
     int hud_h = SH / 5;
     FillArea(0, 0, SW, hud_h, WHITE);
 
@@ -21,7 +22,8 @@ void draw_hud(void) {
     SetFont(font_large, g.time_left <= 30 ? DGRAY : BLACK);
     DrawTextRect(0, 54, SW, 36, ts, ALIGN_CENTER);
 
-    if (g.mode == MODE_SOLO) {
+    if (g.mode == MODE_SOLO)
+    {
         char ss[32];
         snprintf(ss, sizeof(ss), i18n_str(STR_SCORE_LABEL), g.score);
         SetFont(font_small, BLACK);
@@ -30,7 +32,8 @@ void draw_hud(void) {
 
     /* Top-right corner: two buttons, Quit (far corner) and Mode
        (just to its left). */
-    mode_btn_w = 80; mode_btn_h = 28;
+    mode_btn_w = 80;
+    mode_btn_h = 28;
     mode_btn_x = SW - mode_btn_w - 6;
     mode_btn_y = 8;
     DrawRect(mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h, DGRAY);
@@ -39,7 +42,8 @@ void draw_hud(void) {
     DrawTextRect(mode_btn_x, mode_btn_y + 4,
                  mode_btn_w, mode_btn_h, mode_label, ALIGN_CENTER);
 
-    quit_btn_w = 80; quit_btn_h = 28;
+    quit_btn_w = 80;
+    quit_btn_h = 28;
     quit_btn_x = mode_btn_x - quit_btn_w - 10;
     quit_btn_y = 8;
     DrawRect(quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h, DGRAY);
@@ -51,25 +55,34 @@ void draw_hud(void) {
     DrawLine(0, hud_h - 2, SW, hud_h - 2, BLACK);
 }
 
-void draw_grid(void) {
-    for (int r = 0; r < g.board_size; r++) {
-        for (int c = 0; c < g.board_size; c++) {
+void draw_grid(void)
+{
+    for (int r = 0; r < g.board_size; r++)
+    {
+        for (int c = 0; c < g.board_size; c++)
+        {
             int idx = r * g.board_size + c;
             int x = GRID_X + c * CELL_SIZE;
             int y = GRID_Y + r * CELL_SIZE;
 
             int bg = WHITE, order = -1;
-            for (int s = 0; s < g.sel_count; s++) {
-                if (g.selected[s] == idx) {
-                    bg = LGRAY; order = s; break;
+            for (int s = 0; s < g.sel_count; s++)
+            {
+                if (g.selected[s] == idx)
+                {
+                    bg = LGRAY;
+                    order = s;
+                    break;
                 }
             }
             FillArea(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4, bg);
             DrawRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4, BLACK);
 
-            if (g.paused) continue; /* letters hidden while paused */
+            if (g.paused)
+                continue; /* letters hidden while paused */
 
-            if (order >= 0 && g.mode == MODE_SOLO) {
+            if (order >= 0 && g.mode == MODE_SOLO)
+            {
                 char os[4];
                 snprintf(os, sizeof(os), "%d", order + 1);
                 SetFont(font_small, DGRAY);
@@ -93,12 +106,15 @@ void draw_grid(void) {
 /* Y coordinate just below the grid, shared by the Pause/Play button
    and whatever sits below it (word bar or multi-mode hint) so the
    two layouts can't drift out of sync with each other. */
-static int below_grid_y(void) {
+static int below_grid_y(void)
+{
     return GRID_Y + g.board_size * CELL_SIZE + 14;
 }
 
-void draw_pause_button(void) {
-    pause_btn_w = 160; pause_btn_h = 44;
+void draw_pause_button(void)
+{
+    pause_btn_w = 160;
+    pause_btn_h = 44;
     pause_btn_x = (SW - pause_btn_w) / 2;
     pause_btn_y = below_grid_y();
 
@@ -109,7 +125,8 @@ void draw_pause_button(void) {
                  pause_btn_w, pause_btn_h - 8, label, ALIGN_CENTER);
 }
 
-void draw_word_bar(void) {
+void draw_word_bar(void)
+{
     int bar_y = pause_btn_y + pause_btn_h + 14;
     FillArea(0, bar_y, SW, SH - bar_y, WHITE);
 
@@ -131,7 +148,8 @@ void draw_word_bar(void) {
     DrawTextRect(bx, by + 50, 100, 32, clear_label, ALIGN_CENTER);
 }
 
-void draw_found_words(void) {
+void draw_found_words(void)
+{
     int lx = GRID_X + g.board_size * CELL_SIZE + 10;
     int ly = GRID_Y;
     int lw = SW - lx - 6;
@@ -143,32 +161,40 @@ void draw_found_words(void) {
 
     int y = ly + 26;
     int start = (g.word_count > 14) ? g.word_count - 14 : 0;
-    for (int i = start; i < g.word_count; i++) {
+
+    for (int i = start; i < g.word_count; i++)
+    {
         int wl = (int)strlen(g.found_words[i]);
         char line[MAX_WORD_LEN + 8];
         snprintf(line, sizeof(line), "%s +%d",
                  g.found_words[i], score_for_word(wl));
         DrawString(lx, y, line);
         y += 20;
-        if (y > SH - 20) break;
+        if (y > SH - 20)
+            break;
     }
 }
 
-void draw_game(void) {
+void draw_game(void)
+{
     FillArea(0, 0, SW, SH, WHITE);
     draw_hud();
     draw_grid();
     draw_pause_button();
 
-    if (g.mode == MODE_SOLO) {
+    if (g.mode == MODE_SOLO)
+    {
         draw_word_bar();
         draw_found_words();
-    } else {
+    }
+    else
+    {
         int msg_y = pause_btn_y + pause_btn_h + 16;
         SetFont(font_small, DGRAY);
         DrawTextRect(0, msg_y, SW, 28,
-            i18n_str(STR_MULTI_INGAME_HINT),
-            ALIGN_CENTER);
+                     i18n_str(STR_MULTI_INGAME_HINT),
+                     ALIGN_CENTER);
     }
+
     FullUpdate();
 }

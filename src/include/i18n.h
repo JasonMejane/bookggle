@@ -17,59 +17,61 @@
 
 #include "inkview.h"
 
-typedef enum {
-    STR_CHOOSE_MODE,
-    STR_BTN_SOLO,
-    STR_SOLO_HINT,
-    STR_BTN_MULTIPLAYER,
-    STR_MULTI_HINT,
-    STR_LABEL_BOARD_SIZE,
-    STR_LABEL_TIMER,
-    STR_BTN_START,
+typedef enum
+{
+   STR_CHOOSE_MODE,
+   STR_BTN_SOLO,
+   STR_SOLO_HINT,
+   STR_BTN_MULTIPLAYER,
+   STR_MULTI_HINT,
+   STR_LABEL_BOARD_SIZE,
+   STR_LABEL_TIMER,
+   STR_BTN_START,
 
-    STR_HUD_TITLE_SOLO,
-    STR_HUD_TITLE_MULTI,
-    STR_SCORE_LABEL,
-    STR_BTN_MODE,
-    STR_BTN_QUIT,
-    STR_BTN_PAUSE,
-    STR_BTN_PLAY,
-    STR_BTN_SUBMIT,
-    STR_BTN_CLEAR,
-    STR_WORDS_HEADER,
-    STR_MULTI_INGAME_HINT,
+   STR_HUD_TITLE_SOLO,
+   STR_HUD_TITLE_MULTI,
+   STR_SCORE_LABEL,
+   STR_BTN_MODE,
+   STR_BTN_QUIT,
+   STR_BTN_PAUSE,
+   STR_BTN_PLAY,
+   STR_BTN_SUBMIT,
+   STR_BTN_CLEAR,
+   STR_WORDS_HEADER,
+   STR_MULTI_INGAME_HINT,
 
-    STR_TIMES_UP,
-    STR_COMPARE_LISTS,
-    STR_CANCEL_RULE,
-    STR_BTN_NEW_GAME,
-    STR_BTN_CHANGE_MODE,
+   STR_TIMES_UP,
+   STR_COMPARE_LISTS,
+   STR_CANCEL_RULE,
+   STR_BTN_NEW_GAME,
+   STR_BTN_CHANGE_MODE,
 
-    STR_GAME_OVER_TITLE,
-    STR_SCORE_FINAL_SINGULAR,
-    STR_SCORE_FINAL_PLURAL,
+   STR_GAME_OVER_TITLE,
+   STR_SCORE_FINAL_SINGULAR,
+   STR_SCORE_FINAL_PLURAL,
 
-    STR_TOO_SHORT_TITLE,
-    STR_TOO_SHORT_BODY,
-    STR_ALREADY_FOUND_TITLE,
-    STR_ALREADY_FOUND_BODY,
-    STR_INVALID_TITLE,
-    STR_INVALID_BODY,
+   STR_TOO_SHORT_TITLE,
+   STR_TOO_SHORT_BODY,
+   STR_ALREADY_FOUND_TITLE,
+   STR_ALREADY_FOUND_BODY,
+   STR_INVALID_TITLE,
+   STR_INVALID_BODY,
 
-    /* Not user-facing text: each language table's own "en"/"fr" code,
-       resolved via the same GetCurrentLangText() device-language
-       mechanism as everything else. Lets ruleset.c pick a ruleset
-       without a second, separate language-detection mechanism. */
-    STR_LANG_CODE,
+   /* Not user-facing text: each language table's own "en"/"fr" code,
+      resolved via the same GetCurrentLangText() device-language
+      mechanism as everything else. Lets ruleset.c pick a ruleset
+      without a second, separate language-detection mechanism. */
+   STR_LANG_CODE,
 
-    STR_COUNT
+   STR_COUNT
 } StringKey;
 
 /* One {key, text} pair. Shared shape for every bundled language
    table (i18n_strings_en.c, i18n_strings_fr.c, ...). */
-typedef struct {
-    StringKey key;
-    const char *text;
+typedef struct
+{
+   StringKey key;
+   const char *text;
 } LangEntry;
 
 /* Registers every bundled language's table with the SDK. Call once

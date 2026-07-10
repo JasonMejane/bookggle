@@ -6,9 +6,11 @@
 #include <assert.h>
 #include <stdio.h>
 
-void on_timer_tick(int id) {
+void on_timer_tick(int id)
+{
     (void)id;
-    switch (game_timer_callback(id)) {
+    switch (game_timer_callback(id))
+    {
     case TIMER_TICK_RUNNING:
         draw_game();
         break;
@@ -18,7 +20,8 @@ void on_timer_tick(int id) {
     }
 }
 
-int main(void) {
+int main(void)
+{
     fonts_load();
     layout_compute();
 
@@ -33,6 +36,6 @@ int main(void) {
 
     assert(g.time_left == 2);
     assert(stub_full_update_call_count() == 1);
-    printf("timer refresh test passed\n");
+    printf("=== TIMER REFRESH TESTS PASSED ===\n\n");
     return 0;
 }

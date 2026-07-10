@@ -4,7 +4,8 @@
 #include "game_state.h"
 #include "i18n.h"
 
-void draw_multi_end(void) {
+void draw_multi_end(void)
+{
     FillArea(0, 0, SW, SH, WHITE);
 
     SetFont(font_title, BLACK);
@@ -12,9 +13,9 @@ void draw_multi_end(void) {
 
     SetFont(font_medium, BLACK);
     DrawTextRect(0, SH / 8 + 70, SW, 32,
-        i18n_str(STR_COMPARE_LISTS), ALIGN_CENTER);
+                 i18n_str(STR_COMPARE_LISTS), ALIGN_CENTER);
     DrawTextRect(0, SH / 8 + 108, SW, 32,
-        i18n_str(STR_CANCEL_RULE), ALIGN_CENTER);
+                 i18n_str(STR_CANCEL_RULE), ALIGN_CENTER);
 
     int bw = SW * 2 / 3, bh = 58, bx = (SW - bw) / 2;
     int replay_y = SH * 3 / 5;
