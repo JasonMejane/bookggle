@@ -1,0 +1,33 @@
+# Build artifacts
+bin/
+build/
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.so
+*.dylib
+*.dll
+
+# Compiled binaries
+*.exe
+*.out
+*.app
+
+# Debug and temporary files
+*.dSYM/
+*.core
+*.stackdump
+*.log
+
+# Dependency files
+*.d
+
+# Editor and OS files
+*~
+*.swp
+*.swo
+.DS_Store
+.vscode/
+.idea/
