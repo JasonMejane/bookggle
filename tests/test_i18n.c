@@ -2,7 +2,7 @@
    stub's simulated device language), that an unknown device language
    falls back to English, and that i18n_fit_font shrinks the font for
    text too wide for its box.
-   Run: make test-i18n (from tests/), or see tests/README.md. */
+   Run: make test-i18n (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "ui_fonts.h"

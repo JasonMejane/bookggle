@@ -1,16 +1,10 @@
 /* i18n: string keys, translation lookup, button-fit font sizing.
-   See docs/i18n_plan_tier1.md for the full design rationale.
+   See docs/i18n_plan_tier1.md for the design rationale.
 
-   NOTE: this assumes AddTranslation(label, text) registers `text`
-   under whichever language LoadLanguage() last set, and that
-   GetCurrentLangText(label) resolves against the DEVICE's actual
-   system language (with English fallback), based on the SDK header's
-   own inline comment ("return translation for current language, do
-   translate on english") and the GetLangText/GetCurrentLangText
-   naming split. This has not been confirmed against running
-   hardware -- verify on a real device before relying on it in
-   production; i18n_str() has a defensive compiled-in English
-   fallback regardless, so the app degrades safely either way. */
+   Assumes GetCurrentLangText() resolves a label against the device's
+   system language with English fallback (per the SDK header's own
+   note) -- not verified on hardware, but i18n_str() has a defensive
+   compiled-in English fallback regardless. */
 
 #ifndef I18N_H
 #define I18N_H
@@ -57,44 +51,33 @@ typedef enum
    STR_INVALID_TITLE,
    STR_INVALID_BODY,
 
-   /* Not user-facing text: each language table's own "en"/"fr" code,
-      resolved via the same GetCurrentLangText() device-language
-      mechanism as everything else. Lets ruleset.c pick a ruleset
-      without a second, separate language-detection mechanism. */
+   /* Not user-facing: each table's own "en"/"fr" code, resolved via
+      the same GetCurrentLangText() mechanism so ruleset.c needs no
+      separate language detection. */
    STR_LANG_CODE,
 
    STR_COUNT
 } StringKey;
 
-/* One {key, text} pair. Shared shape for every bundled language
-   table (i18n_strings_en.c, i18n_strings_fr.c, ...). */
 typedef struct
 {
    StringKey key;
    const char *text;
 } LangEntry;
 
-/* Registers every bundled language's table with the SDK. Call once
-   from EVT_INIT, before any drawing. */
+/* Registers every bundled language table. Call once from EVT_INIT,
+   before any drawing. */
 void i18n_init(void);
 
-/* Current-language text for a key. Never returns NULL; falls back to
-   the compiled-in English table if the SDK has no translation. Any
-   %d/%s placeholder in a key's text (e.g. STR_SCORE_LABEL) must be
-   preserved by every language's translation -- same count, since the
-   result is used directly as a snprintf format string at the call
-   site. */
+/* Current-language text for a key; never NULL (compiled-in English
+   fallback). A key's %d/%s placeholders must be preserved in every
+   language -- the result is used as a snprintf format string. */
 const char *i18n_str(StringKey key);
 
-/* Picks the widest-fitting font at or below `preferred` (ladder:
-   font_large -> font_medium -> font_small) such that StringWidth(text)
-   <= box_w. Never steps UP from `preferred`, so untranslated/short
-   text keeps today's exact sizing. Falls back to font_small if
-   nothing fits -- treated as a translation-length bug to fix in the
-   offending language table, not something the UI should silently
-   clip. Leaves a font active via SetFont as a side effect of
-   measuring; caller should SetFont again before drawing if a
-   specific color is needed. */
+/* Widest font at or below `preferred` (font_large -> medium -> small)
+   whose StringWidth(text) fits box_w; never steps up, falls back to
+   font_small. Leaves a font active via SetFont, so re-SetFont before
+   drawing if a specific color is needed. */
 ifont *i18n_fit_font(const char *text, int box_w, ifont *preferred);
 
 #endif /* I18N_H */

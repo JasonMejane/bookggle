@@ -15,6 +15,7 @@
 static int g_close_app_calls = 0;
 static int g_full_update_calls = 0;
 static int g_partial_update_calls = 0;
+static int g_hard_timer_calls = 0;
 
 int ScreenWidth(void) { return 758; }
 int ScreenHeight(void) { return 1024; }
@@ -130,10 +131,12 @@ void stub_reset_update_counters(void)
 {
     g_full_update_calls = 0;
     g_partial_update_calls = 0;
+    g_hard_timer_calls = 0;
 }
 
 int stub_full_update_call_count(void) { return g_full_update_calls; }
 int stub_partial_update_call_count(void) { return g_partial_update_calls; }
+int stub_hard_timer_call_count(void) { return g_hard_timer_calls; }
 
 /* No real event loop — tests call module functions directly. */
 void InkViewMain(iv_handler handler) { (void)handler; }
@@ -143,6 +146,7 @@ int SetHardTimer(const char *name, iv_timer_handler handler, int ms)
     (void)name;
     (void)handler;
     (void)ms;
+    g_hard_timer_calls++;
     return 1;
 }
 

@@ -2,12 +2,20 @@
 
 #include "ui_fonts.h"
 #include "game_state.h"
+#include "i18n.h"
+
+void ui_draw_button(int x, int y, int w, int h,
+                    const char *label, int filled, ifont *preferred)
+{
+    FillArea(x, y, w, h, filled ? BLACK : WHITE);
+    DrawRect(x, y, w, h, BLACK);
+    SetFont(i18n_fit_font(label, w - UI_PAD, preferred), filled ? WHITE : BLACK);
+    DrawTextRect(x, y, w, h, label, ALIGN_CENTER);
+}
 
 void fonts_load(void)
 {
-    /* Make the UI text noticeably larger on the target e-reader and
-       use the bold face for the shared fonts so dice letters and other
-       labels render more prominently. */
+    /* Bold face at large sizes for e-ink legibility. */
     font_title = OpenFont("LiberationSans-Bold", 48, 1);
     font_large = OpenFont("LiberationSans-Bold", 36, 1);
     font_medium = OpenFont("LiberationSans-Bold", 28, 1);
@@ -49,13 +57,11 @@ void layout_compute(void)
 
 void layout_compute_grid(int board_size)
 {
-    /* Width budget is board-size-aware so touch targets stay close
-       to the same physical size at 5x5 as at 4x4, rather than
-       shrinking by an extra column's worth of room. At SW=758:
-       4x4 @ 60% -> 113px cells; 5x5 @ 75% -> 113px cells too. */
+    /* Board-size-aware width budget so cells stay ~the same physical
+       size on both boards (SW=758: 4x4 @ 60% and 5x5 @ 75% both ~113px). */
     int width_pct = (board_size == 5) ? 75 : 60;
 
     CELL_SIZE = (SW * width_pct / 100) / board_size;
     GRID_X = (SW - CELL_SIZE * board_size) / 2;
-    GRID_Y = SH / 5;
+    GRID_Y = UI_HUD_H + UI_GAP;
 }

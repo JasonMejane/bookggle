@@ -1,5 +1,5 @@
 /* Full game scenario, calls real module functions (no mocks).
-   Run: make test-flow (from tests/), or see tests/README.md. */
+   Run: make test-flow (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "ui_fonts.h"

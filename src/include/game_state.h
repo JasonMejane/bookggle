@@ -6,19 +6,18 @@
 #include "inkview.h"
 #include <stddef.h>
 
-/* Board size is a runtime choice (see GameState.board_size), not a
-   compile-time constant -- arrays are sized for the largest
-   supported board (5x5) and only the active board_size x board_size
-   portion is used. See docs/board_size_5x5_plan.md. */
+/* Board size is a runtime choice (GameState.board_size), not
+   compile-time: arrays are sized for the largest board and only the
+   active board_size x board_size slice is used. */
 #define MAX_BOARD_SIZE 5
-#define MAX_DICE_COUNT (MAX_BOARD_SIZE * MAX_BOARD_SIZE) /* 25 */
+#define MAX_DICE_COUNT (MAX_BOARD_SIZE * MAX_BOARD_SIZE)
 #define DEFAULT_BOARD_SIZE 4
 
 #define MAX_WORD_LEN 64 /* 25 cells * 2 chars (QU) + '\0', rounded up */
 #define MAX_WORDS 200
 #define MIN_WORD_LEN 3         /* compiled-in default; rulesets carry their own */
-#define TIMER_SECONDS 180      /* 3:00 -- default and one of two options */
-#define TIMER_SECONDS_SHORT 90 /* 1:30 -- the other option */
+#define TIMER_SECONDS 180      /* 3:00 */
+#define TIMER_SECONDS_SHORT 90 /* 1:30 */
 
 typedef enum
 {
@@ -62,48 +61,31 @@ extern ifont *font_small;
 extern int SW, SH;
 extern int CELL_SIZE, GRID_X, GRID_Y;
 
-/* "Mode" button hitbox, set in screen_game.c, read in input.c */
+/* Button hitboxes: the screen that draws each control writes its
+   *_btn_x/y/w/h here; input.c reads them to route taps. Game HUD: */
 extern int mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h;
-
-/* "Quit" button hitbox (top-right of the game HUD, next to "Mode"),
-   set in screen_game.c, read in input.c. Closes the app entirely. */
 extern int quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h;
-
-/* Pause/Play button hitbox (below the grid, in-game screen), set in
-   screen_game.c, read in input.c. Toggles g.paused. */
 extern int pause_btn_x, pause_btn_y, pause_btn_w, pause_btn_h;
+extern int submit_btn_x, submit_btn_y, submit_btn_w, submit_btn_h;
+extern int clear_btn_x, clear_btn_y, clear_btn_w, clear_btn_h;
 
-/* Board-size toggle hitboxes (mode-select screen), set in
-   screen_mode_select.c, read in input.c */
+/* Multiplayer end screen: */
+extern int newgame_btn_x, newgame_btn_y, newgame_btn_w, newgame_btn_h;
+extern int changemode_btn_x, changemode_btn_y, changemode_btn_w, changemode_btn_h;
+
+/* Mode-select toggles + Start: */
 extern int board4_btn_x, board4_btn_y, board4_btn_w, board4_btn_h;
 extern int board5_btn_x, board5_btn_y, board5_btn_w, board5_btn_h;
-
-/* Mode toggle hitboxes (mode-select screen). Unlike the old design,
-   tapping these only changes selected_mode -- it no longer starts
-   the game directly; the Start button does that. */
 extern int mode_solo_btn_x, mode_solo_btn_y, mode_solo_btn_w, mode_solo_btn_h;
 extern int mode_multi_btn_x, mode_multi_btn_y, mode_multi_btn_w, mode_multi_btn_h;
-
-/* Timer-duration toggle hitboxes (mode-select screen). */
 extern int timer90_btn_x, timer90_btn_y, timer90_btn_w, timer90_btn_h;
 extern int timer180_btn_x, timer180_btn_y, timer180_btn_w, timer180_btn_h;
-
-/* Start button hitbox (mode-select screen): the only control that
-   actually calls game_start(). */
 extern int start_btn_x, start_btn_y, start_btn_w, start_btn_h;
 
-/* Player's chosen board size for the next game, defaults to 4x4.
-   Set by input.c when the player taps the toggle, read by
-   game_start() (game_logic.c) when a new game begins. */
+/* Chosen settings for the next game: written by the mode-select
+   toggles, applied to g by game_start(). */
 extern int selected_board_size;
-
-/* Player's chosen mode (Solo/Multiplayer) for the next game, set by
-   the mode toggle, read when the Start button is tapped. */
 extern GameMode selected_mode;
-
-/* Player's chosen timer duration (TIMER_SECONDS or
-   TIMER_SECONDS_SHORT) for the next game, set by the timer toggle,
-   read by game_start(). */
 extern int selected_timer_seconds;
 
 #endif /* GAME_STATE_H */

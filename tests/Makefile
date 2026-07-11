@@ -2,13 +2,15 @@
 # on a regular dev machine, no PocketBook SDK or device needed,
 # using the no-op stub in tests/stub/ for InkView.
 #
-#   make                    build + run all 6 test suites
+#   make                    build + run all 8 test suites
 #   make test-flow          full game scenario (4x4) only
 #   make test-dice          dice roll, per ruleset (en-4x4/en-5x5/fr-4x4/fr-5x5), only
 #   make test-integration   game_start() <-> dice, both board sizes, only
 #   make test-i18n          translation completeness + fit-font only
 #   make test-ruleset       ruleset selection logic (language x board_size) only
 #   make test-5x5           full 5x5 game cycle + min_word_len=4 rule only
+#   make test-timer-refresh running tick decrements + re-arms + redraws only
+#   make test-game-over-blink  grid blink-to-dark on game end only
 #   make clean              remove compiled test binaries
 #
 # Needs gcc and make only.
@@ -51,9 +53,9 @@ INTEGRATION_SRCS := $(SRC_DIR)/game_state.c $(SRC_DIR)/ui_fonts.c \
 I18N_TEST_SRCS := $(SRC_DIR)/game_state.c $(SRC_DIR)/ui_fonts.c $(I18N_SRCS)
 RULESET_TEST_SRCS := $(SRC_DIR)/game_state.c $(I18N_SRCS) $(RULESET_SRCS)
 
-.PHONY: all test-flow test-dice test-integration test-i18n test-ruleset test-5x5 test-timer-refresh clean
+.PHONY: all test-flow test-dice test-integration test-i18n test-ruleset test-5x5 test-timer-refresh test-game-over-blink clean
 
-all: test-flow test-dice test-integration test-i18n test-ruleset test-5x5 test-timer-refresh
+all: test-flow test-dice test-integration test-i18n test-ruleset test-5x5 test-timer-refresh test-game-over-blink
 
 test-flow: | $(BIN_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) \
@@ -68,6 +70,13 @@ test-timer-refresh: | $(BIN_DIR)
 		-o $(BIN_DIR)/test_timer_refresh -lm
 	@echo ">>> Running: test_timer_refresh"
 	@./$(BIN_DIR)/test_timer_refresh
+
+test-game-over-blink: | $(BIN_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) \
+		$(COMMON_SRCS) $(STUB_SRC) test_game_over_blink.c \
+		-o $(BIN_DIR)/test_game_over_blink -lm
+	@echo ">>> Running: test_game_over_blink"
+	@./$(BIN_DIR)/test_game_over_blink
 
 test-dice: | $(BIN_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) \

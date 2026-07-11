@@ -74,19 +74,14 @@ static void handle_tap_mode_select(int tx, int ty)
 
 static void handle_tap_multi_end(int tx, int ty)
 {
-    int bw = SW * 2 / 3, bh = 58, bx = (SW - bw) / 2;
-    int replay_y = SH * 3 / 5;
-    int sm_w = SW / 2, sm_h = 40, sm_x = (SW - sm_w) / 2;
-    int sm_y = replay_y + bh + 18;
-
-    if (tx >= bx && tx <= bx + bw &&
-        ty >= replay_y && ty <= replay_y + bh)
+    if (tx >= newgame_btn_x && tx <= newgame_btn_x + newgame_btn_w &&
+        ty >= newgame_btn_y && ty <= newgame_btn_y + newgame_btn_h)
     {
         game_start(MODE_MULTI);
         draw_game();
     }
-    else if (tx >= sm_x && tx <= sm_x + sm_w &&
-             ty >= sm_y && ty <= sm_y + sm_h)
+    else if (tx >= changemode_btn_x && tx <= changemode_btn_x + changemode_btn_w &&
+             ty >= changemode_btn_y && ty <= changemode_btn_y + changemode_btn_h)
     {
         cur_screen = SCREEN_MODE_SELECT;
         draw_mode_select();
@@ -121,18 +116,16 @@ static void handle_tap_game(int tx, int ty)
 
     if (g.mode == MODE_SOLO && !g.game_over)
     {
-        int bar_y = pause_btn_y + pause_btn_h + 14;
-        int bx = SW - 110, by = bar_y + 6;
-
-        if (tx >= bx && tx <= bx + 100 &&
-            ty >= by && ty <= by + 36)
+        if (tx >= submit_btn_x && tx <= submit_btn_x + submit_btn_w &&
+            ty >= submit_btn_y && ty <= submit_btn_y + submit_btn_h)
         {
             validate_word();
             draw_game();
             return;
         }
-        if (tx >= bx && tx <= bx + 100 &&
-            ty >= by + 44 && ty <= by + 76)
+
+        if (tx >= clear_btn_x && tx <= clear_btn_x + clear_btn_w &&
+            ty >= clear_btn_y && ty <= clear_btn_y + clear_btn_h)
         {
             game_reset_selection();
             draw_game();

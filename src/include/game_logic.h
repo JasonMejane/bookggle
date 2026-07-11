@@ -27,7 +27,7 @@ void handle_cell_touch(int x, int y);
 
 int word_already_found(const char *w);
 
-/* Length-only check for now; swap in a real dictionary lookup later. */
+/* Length-only check (no dictionary). */
 int word_is_valid(const char *w);
 
 int score_for_word(int len);

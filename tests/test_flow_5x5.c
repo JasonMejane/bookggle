@@ -4,7 +4,7 @@
    board, and the min_word_len=4 Big Boggle rule actually being
    enforced (a 3-letter word that would be valid at 4x4 must be
    rejected at 5x5).
-   Run: make test-5x5 (from tests/), or see tests/README.md. */
+   Run: make test-5x5 (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "ui_fonts.h"

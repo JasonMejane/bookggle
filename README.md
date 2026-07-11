@@ -5,8 +5,9 @@ Bookggle is a native C Boggle game for PocketBook e-readers, built on the InkVie
 ## Quick start
 
 ```bash
-# Build the real PocketBook app (needs the SDK, see "PocketBook SDK" below)
-export PBSDK=$HOME/SDK_6.3.0
+# Build the real PocketBook app (needs the SDK, see "PocketBook SDK" below).
+# Use the absolute path to the SDK-B288 dir — see "Build" for why.
+export PBSDK=/path/to/SDK_6.3.0/SDK-B288
 make
 
 # Run the full logic test suite on your dev machine (no SDK, no device)
@@ -14,7 +15,7 @@ cd tests && make
 ```
 
 See **"Build"** for CMake/Docker alternatives and how to deploy to a
-device, and **"Run logic without a device"** / `tests/README.md` for
+device, and **"Run logic without a device"** / `README.md` for
 what each test suite checks.
 
 ## Setup screen
@@ -32,9 +33,10 @@ old values.
 
 - **Solo** — tap cells to spell words, live score, word list.
 - **Multiplayer** — only the grid and timer are shown. Each player
-  notes words on paper. At 0:00 the **grid disappears** and an end
-  screen tells players to compare lists (words found by more than one
-  player cancel out — standard Boggle rule).
+  notes words on paper. At 0:00 the grid **blinks and settles fully
+  dark** to signal the end, then an end screen tells players to compare
+  lists (words found by more than one player cancel out — standard
+  Boggle rule).
 - **Grid size** — 4×4 (standard) or 5×5 ("Big Boggle"), independent of
   Solo/Multiplayer.
 - **Timer** — 1:30 or 3:00, independent of the other two. Read by
@@ -48,8 +50,14 @@ same (or closes the app if already on that screen).
 
 ## Game screen
 
-Top to bottom: HUD (title, timer, score in Solo), the grid, then a
-**Pause/Play** button, then the word bar (Solo) or a hint (Multiplayer).
+The HUD spans the top: a control row with **Pause/Play** (top-left),
+the mode title, and **Quit** / **Mode** (top-right), then a large
+centered timer and, in Solo, the score. The grid sits below the HUD.
+In Solo, a full-width **word bar** runs under the grid — the word
+you're building on the left, **Submit** and **Clear** on the right —
+and the found-words list fills the space below it as a full-width,
+multi-column panel. In Multiplayer, only a centered hint sits below
+the grid (no word bar or word list).
 
 - **Pause** freezes the timer and hides every cell's letter (the grid
   outline stays visible, just blank) without losing any progress.
@@ -63,6 +71,9 @@ Top to bottom: HUD (title, timer, score in Solo), the grid, then a
   with it.
 - Submit/Clear stay active while paused, since finishing a word you
   already built before pausing doesn't reveal anything new.
+- When time runs out, the grid **blinks and settles fully dark** in
+  both modes — a clear "game over" signal — before the score dialog
+  (Solo) or the results screen (Multiplayer) appears.
 
 Two buttons sit in the HUD's top-right corner: **"Mode"** (returns to
 the setup screen; tapping "Start" again from there begins a brand new
@@ -81,13 +92,18 @@ languages ship today: English (`src/i18n_strings_en.c`) and French
 (`src/i18n_strings_fr.c`). Adding another is one new table file plus
 one line in `i18n_init()` — no changes to any `screen_*.c` file.
 
-Buttons with fixed pixel widths (Solo/Multiplayer/Submit/Clear/Mode/
-Quit/Pause/Play/Start/New game/Change mode) use `i18n_fit_font()` to
-shrink through the font ladder (`font_large` → `font_medium` →
-`font_small`) via `StringWidth()` measurement, so a longer translation
-doesn't overflow its box. Grid cell letters use the same measurement,
-since a 5×5 board's smaller cells can make even a single letter (or
-the "Qu" digraph) tight.
+Every button across all screens (Solo/Multiplayer/Submit/Clear/Mode/
+Quit/Pause/Play/Start/New game/Change mode) is drawn through one shared
+helper, `ui_draw_button()` in `src/ui_fonts.c`: filled black with white
+text for the primary or selected action, a black outline with black
+text otherwise, and the label shrunk through the font ladder
+(`font_large` → `font_medium` → `font_small`) via `i18n_fit_font()` /
+`StringWidth()` so a longer translation doesn't overflow its box. Shared
+layout constants (`UI_MARGIN`, `UI_GAP`, `UI_BTN_H`, `UI_TOGGLE_H`,
+`UI_HUD_H`, all in `src/include/ui_fonts.h`) keep margins, tap sizes,
+and spacing consistent between screens. Grid cell letters use the same
+fit measurement, since a 5×5 board's smaller cells can make even a
+single letter (or the "Qu" digraph) tight.
 
 The **grid roll and word rules also follow a ruleset** (`GameRuleset`,
 `src/include/ruleset.h`) — not just the menu text. But unlike the UI
@@ -213,6 +229,7 @@ SetHardTimer("MyTimer", my_callback, 1000);
 
 static void my_callback(int id) {
     // ... update + PartialUpdate(...)
+    SetHardTimer("MyTimer", my_callback, 1000);  // one-shot: re-arm to repeat
 }
 ```
 
@@ -220,6 +237,9 @@ static void my_callback(int id) {
 > it returns a `TimerTickResult`. The adapter `on_timer_tick()` in
 > **`src/main.c`** is the one actually registered with `SetHardTimer`
 > (which requires `void(*)(int)`), and it picks the redraw.
+> `SetHardTimer` is **one-shot**, so `game_timer_callback()` re-arms it
+> (through `game_timer_start()`) on every tick that keeps the game
+> running, and stops re-arming once the game ends.
 
 ---
 
@@ -241,7 +261,7 @@ bookggle/
 │   │   ├── screen_mode_select.h
 │   │   ├── screen_multi_end.h
 │   │   ├── timer.h               game timer
-│   │   └── ui_fonts.h            font loading + screen layout
+│   │   └── ui_fonts.h            font loading, layout metrics, shared button helper
 │   ├── dice.c              shuffle-and-roll mechanics only, no letters
 │   ├── game_logic.c       pure logic, no drawing
 │   ├── game_state.c       single definition of global state `g`
@@ -260,7 +280,7 @@ bookggle/
 │   ├── screen_multi_end.c
 │   ├── timer.c            pure logic, no drawing
 │   └── ui_fonts.c
-├── tests/             host tests, no SDK/device — see tests/README.md
+├── tests/             host tests, no SDK/device — see README.md
 ├── CMakeLists.txt
 ├── Makefile
 └── README.md
@@ -382,14 +402,18 @@ cd tests
 make
 ```
 
-Six suites: `test_flow.c` (full 4x4 game scenario, 20 checks),
+Eight suites: `test_flow.c` (full 4x4 game scenario, 20 checks),
 `test_dice.c` (dice roll, bijection + Q/Z uniqueness, once per bundled
 ruleset — en-4x4/en-5x5/fr-4x4/fr-5x5), `test_game_start_dice.c` (game_start
 <-> dice integration, both board sizes), `test_i18n.c` (translation
 completeness across languages + fit-font sizing), `test_ruleset.c`
 (ruleset selection across all 4 bundled language x board-size pairs,
 plus the unknown-language fallback), `test_flow_5x5.c` (full 5x5 cycle
-and the min_word_len=4 rule). See `tests/README.md` for details.
+and the min_word_len=4 rule), `test_timer_refresh.c` (a running timer
+tick decrements the clock, re-arms the one-shot device timer, and
+redraws the screen exactly once), and `test_game_over_blink.c` (the
+grid blinks and settles fully dark at game over). See
+`README.md` for details.
 
 ### Troubleshooting the build
 
@@ -544,6 +568,273 @@ int word_in_dict(const char *w) {
 frequently-changing areas (grid, HUD), full for screen transitions.
 
 ---
+
+## Host tests
+
+Checks the game **logic** (rules, navigation, score, timer, dice roll,
+ruleset selection, board size) on your dev machine (Linux/macOS/WSL)
+— no PocketBook SDK, no device. No drawing is tested, only `src/`
+behavior.
+
+### How
+
+`src/` only touches hardware through `inkview.h` functions
+(`DrawString`, `FillArea`, `SetHardTimer`...). `tests/stub/` is a
+minimal no-op rewrite of that header, so the real modules link into a
+binary that runs natively here.
+
+```
+tests/
+├── stub/
+│   ├── inkview_stub.c     no-op bodies + font/translation stub state + update counters
+│   ├── inkview.h          minimal InkView header rewrite
+│   └── stub_hooks.h       test-only hooks (stub_set_current_lang, stub_close_app_call_count, stub_hard_timer_call_count), not in the real SDK
+├── test_dice.c            dice roll, per bundled ruleset (4 rulesets x 2 checks)
+├── test_flow_5x5.c        full 5x5 cycle + min_word_len=4 rule (3 checks)
+├── test_flow.c            full 4x4 game scenario (20 checks)
+├── test_game_over_blink.c grid blinks and settles fully dark at game over (2 checks)
+├── test_game_start_dice.c game_start() <-> dice integration, both board sizes (2 checks)
+├── test_i18n.c            translation completeness + fit-font sizing (7 checks)
+├── test_ruleset.c         ruleset selection across language x board size (7 checks)
+├── test_timer_refresh.c   a running tick decrements, re-arms, + redraws once; ending tick doesn't re-arm (5 checks)
+└── Makefile
+```
+
+⚠️ **Never use `tests/stub/inkview.h` for the production build.** The
+real PocketBook build (root `Makefile` / `CMakeLists.txt`) uses the
+SDK's own `inkview.h`.
+
+`src/timer.c` is pure logic; it registers `on_timer_tick(int)` with
+InkView, whose real (drawing) body lives in `src/main.c`. Since these
+test binaries don't compile `main.c` (it has its own `main()`),
+`test_flow.c`, `test_game_start_dice.c`, `test_flow_5x5.c`,
+`test_timer_refresh.c`, and `test_game_over_blink.c` each provide a
+minimal `on_timer_tick()` — `test_flow.c`, `test_game_start_dice.c`,
+and `test_flow_5x5.c` just call `game_timer_callback()` (enough to
+link, since they all call it directly anyway), `test_timer_refresh.c`'s
+version also calls `draw_game()` so it can assert the tick actually
+redraws, and `test_game_over_blink.c`'s is a pure no-op (it exercises
+`grid_game_over_blink()` directly and never fires the timer).
+
+`inkview_stub.c` counts `FullUpdate()`/`PartialUpdate()` calls
+(`stub_reset_update_counters()`, `stub_full_update_call_count()`,
+`stub_partial_update_call_count()`, all declared in the stub
+`inkview.h`) and `SetHardTimer()` calls
+(`stub_hard_timer_call_count()`, in `stub_hooks.h`).
+`test_timer_refresh.c` uses these to verify a running tick triggers
+exactly one screen redraw and re-arms the one-shot timer (while an
+ending tick doesn't), and `test_game_over_blink.c` uses the partial-
+update counter to check the grid flashes the expected number of times.
+
+The stub's `OpenFont`/`SetFont`/`StringWidth` track a real per-font
+size (not a constant), so `i18n_fit_font()`'s "shrink to a smaller
+font that fits" logic is meaningfully exercised in `test_i18n.c` — a
+naive constant-width stub couldn't tell `font_large` from
+`font_small`. It's a rough proxy (`strlen(text) * font_size / 2`),
+not a real font-metrics engine.
+
+`stub_set_current_lang()` (declared in `stub_hooks.h`, not
+`inkview.h`) simulates a device language change for
+`GetCurrentLangText()`, since there's no real device to change
+Settings on. It's test-only and kept out of `inkview.h` so that file
+stays a faithful mirror of the real SDK header's shape.
+`ruleset_select(board_size)` piggybacks on the exact same language
+mechanism (via `i18n_str(STR_LANG_CODE)`) for its language axis, so
+`stub_set_current_lang()` drives UI-string language and (half of)
+ruleset selection in tests, same as on a real device — the board-size
+half of the selection is just a plain function argument, no stub
+needed for that axis.
+
+`stub_close_app_call_count()` (also in `stub_hooks.h`) counts calls to
+the stub's `CloseApp()`, which is otherwise a no-op — the real SDK's
+`CloseApp()` exits the app, which a host test obviously can't do to
+its own process, so the count is how `test_flow.c` verifies the Quit
+button's tap actually reaches `CloseApp()` rather than just checking
+nothing crashed.
+
+### Requirements
+
+`gcc` and `make` only.
+
+### Run
+
+From `tests/`:
+
+```bash
+make                       # build + run all 8 suites
+make test-flow             # full 4x4 game scenario only
+make test-dice             # dice roll, per ruleset, only
+make test-integration      # game_start() <-> dice, both board sizes, only
+make test-i18n             # translation completeness + fit-font only
+make test-ruleset          # ruleset selection logic only
+make test-5x5              # full 5x5 cycle + min_word_len=4 rule only
+make test-timer-refresh    # a running tick decrements, re-arms, + redraws once only
+make test-game-over-blink  # grid blinks to dark at game over only
+make clean                 # remove compiled binaries (tests/bin/)
+```
+
+A passing suite prints `[OK] ...` lines then a `=== ... PASSED ===`
+summary, exit code 0. A failure aborts on the first broken `assert()`
+(`SIGABRT`); the last `[OK]` line printed shows which step it was on.
+
+### What each file checks
+
+**`test_flow.c`** — full 4x4 game scenario, calling real module
+functions end to end: init (`i18n_init()` then
+`ruleset_select(DEFAULT_BOARD_SIZE)`, mirroring `main.c`'s own
+`EVT_INIT` ordering), tapping the "Solo" toggle only selects it
+(`selected_mode` changes, the game does **not** start yet — the key
+setup-screen behavior change from earlier versions of this screen,
+where tapping Solo/Multiplayer started the game directly), tapping
+"Start" actually begins the game with the current selections
+(`g.mode`, `g.board_size`, `g.time_left` all checked against what was
+selected), select two adjacent cells (one is Q, checks the `QU`
+digraph), validate a word (score + word list), revalidate it
+(duplicate rejected), tapping Pause freezes the timer (a tick while
+paused leaves `time_left` unchanged and never returns a
+`TIMER_TICK_ENDED_*`) and makes cell touches a no-op without touching
+the underlying grid data, tapping the same button again (now showing
+"Play") resumes the timer from exactly the frozen value, tapping
+"Quit" reaches `CloseApp()` (counted via `stub_close_app_call_count()`,
+since the stub's `CloseApp()` doesn't really exit the test process),
+timer to 0:00 in solo (`TimerTickResult` + `g.game_over`), timer to
+0:00 in multi (`TIMER_TICK_ENDED_MULTI` + `SCREEN_MULTI_END`, grid
+must disappear), touch ignored in multi mode, "Mode" button returns to
+the setup screen, Back key from the setup screen doesn't crash,
+tapping "5x5" and "1:30" toggles updates
+`selected_board_size`/`selected_timer_seconds`, and a new game after
+those toggles actually starts at `g.board_size == 5` and
+`g.time_left == TIMER_SECONDS_SHORT` (full round-trip through the real
+tap handlers, not just checking each toggle's own state).
+
+**`test_dice.c`** — checks `dice_roll_grid()` against each bundled
+ruleset's own dice table, once per (language, board_size) ruleset
+(selected via `stub_set_current_lang()` + `ruleset_select(board_size)`,
+same as production): exact letter<->die bijection on 500 rolls per
+ruleset (Kuhn's algorithm — see in-file note on why this replaced an
+earlier, exponential-worst-case backtracking approach), and never
+more Q or Z dice per grid than that specific ruleset's own table
+actually has on 2000 rolls per ruleset. Three of the four bundled
+tables have exactly one die each carrying Q and Z (English 5x5 even
+puts both on the same physical die); **French 5x5 genuinely has two
+Q dice** — the check is parameterized per ruleset rather than
+assuming "at most one" universally, specifically to accommodate this.
+Each ruleset is checked against its own independently-transcribed
+reference table — verified byte-for-byte identical to
+`src/ruleset_en_4x4.c` / `ruleset_en_5x5.c` / `ruleset_fr_4x4.c` /
+`ruleset_fr_5x5.c`'s own tables during implementation, but kept as a
+separate transcription here so the test isn't just checking a table
+against itself. Sources: English 4x4
+[boardgames.stackexchange.com/q/48151](https://boardgames.stackexchange.com/q/48151);
+English 5x5, physically verified against an owned 1979 set,
+[en.wikipedia.org/wiki/Talk:Boggle](https://en.wikipedia.org/wiki/Talk:Boggle);
+French 4x4 [baggle.org/regles.php](http://baggle.org/regles.php);
+French 5x5 provided directly (not independently sourced/cited like
+the other three).
+
+**`test_game_start_dice.c`** — checks `game_start()` (the real
+per-game entry point called from `input.c`) actually uses
+`dice_roll_grid()`, not just that `dice.c` works in isolation, at
+**both** board sizes: 200 games launched at `selected_board_size=4`,
+then 200 more at `=5`. This test never sets a device language, so
+`game_start()`'s own `ruleset_select()` call resolves to English at
+whichever board size is active (via `i18n_str`'s own fallback) — it
+exercises the English 4x4/5x5 rulesets specifically, not French;
+French-specific dice validity (including its 2-Q characteristic) is
+`test_dice.c`'s job. Every grid is checked against the `<=1 Q` /
+`<=1 Z` invariant that holds for both English rulesets, and
+`g.board_size` is asserted to actually match what was requested.
+`game_logic.c` calls `i18n_str()` and `ruleset_active()`, so this test
+also links `i18n.c` + both string tables + `ruleset.c` + all four
+ruleset tables (link-time requirement only — the test itself never
+triggers a warning dialog or selects French).
+
+**`test_i18n.c`** — checks every `StringKey` resolves to non-empty
+text in both bundled languages (`en`, `fr`), that an unrecognized
+device language falls back to English rather than showing a blank
+string, and that `i18n_fit_font()` correctly steps down the font
+ladder (`font_large` → `font_medium` → `font_small`) as the button
+box gets tighter relative to the text, falling back to `font_small`
+(never `NULL`) when nothing fits. (`STR_TOO_SHORT_BODY` became a
+`%d`-templated string during the 5x5 work — still covered by this
+test's generic "non-empty for every key" check, since a template with
+its placeholder intact is still non-empty text.)
+
+**`test_ruleset.c`** — checks `ruleset_select(board_size)` /
+`ruleset_active()` selection logic specifically (as distinct from "is
+this dice table internally valid", covered by `test_dice.c`), across
+**both** inputs: `ruleset_active()` defaults to English 4x4 before
+`ruleset_select()` is ever called (never `NULL`); all four bundled
+combinations (`en`+4, `en`+5, `fr`+4, `fr`+5) each select their own
+matching ruleset with the right `dice_count`/`min_word_len`; an
+unrecognized device language falls back to English at both board
+sizes (the fallback pattern to follow if a future language/board-size
+combination isn't bundled yet — see `ruleset.h`'s doc comment); all
+four bundled rulesets use the Qu digraph.
+
+**`test_flow_5x5.c`** — full 5x5 game cycle, the scenario `test_flow.c`
+doesn't cover: `game_start()` under `selected_board_size=5` actually
+produces `g.board_size==5`; touching row 4/col 4 (a cell that
+wouldn't exist on a 4x4 board) is reachable, proving
+`cell_from_coords()`'s bounds check genuinely uses `g.board_size`
+rather than a stale `4`; building a 3-letter word ("QUB") and
+submitting it is **rejected** as too short, because Big Boggle's
+`min_word_len=4` is actually enforced (the same 3 letters would be
+accepted at 4x4 — this is the one rule that most needed a real,
+not-just-unit-level test, since a bug here would silently let
+3-letter words through); a 4-letter word ("QUBG") from a nearby path
+is accepted, with the right score.
+
+**`test_timer_refresh.c`** — the redraw-on-tick contract, which the
+other flow tests skip (their `on_timer_tick()` deliberately draws
+nothing). With a solo game on `SCREEN_GAME`, one `on_timer_tick()`
+must both decrement the clock (`game_timer_callback()` fired) and
+repaint the screen exactly once — asserted via
+`stub_full_update_call_count() == 1` after
+`stub_reset_update_counters()`. It also asserts the running tick
+**re-arms** the one-shot device timer (`stub_hard_timer_call_count()
+== 1`) and that the tick which ends the game does **not** re-arm
+(`== 0`) — guarding the fix for a device bug where the clock stopped
+after a single tick because nothing re-scheduled `SetHardTimer`. Guards
+too against a regression where a tick updates state but never redraws
+(or redraws repeatedly).
+
+**`test_game_over_blink.c`** — the game-over signal. Calls
+`grid_game_over_blink()` directly (a solo game with `g.game_over` set)
+and asserts the grid flashes `GAME_OVER_BLINKS` times — `2 *
+GAME_OVER_BLINKS` partial updates over the grid region, no full-screen
+refresh — before settling fully dark. Guards against the blink being
+dropped, mis-counted, or accidentally promoted to a full-screen
+`FullUpdate()`.
+
+### Adding tests
+
+New 4x4 scenario: add a step to `test_flow.c` (call a module function,
+`assert()` the expected state). New 5x5-specific scenario: add to
+`test_flow_5x5.c` instead, so 4x4 and 5x5 coverage stay in separate,
+individually-runnable files. New standalone test file: add a target to
+`Makefile` following `test-dice`/`test-integration` — list the `src/`
+modules actually needed for the link, then a build+run rule.
+
+New language (UI strings only): add a new `i18n_strings_<code>.c`
+table in `src/`, one line in `i18n_init()` (`src/i18n.c`) to register
+it, and add its language code to `test_i18n.c`'s `langs[]` array to
+get completeness checking for free.
+
+New ruleset (dice letters + rules, not just UI text): add a new
+`ruleset_<code>_<size>.c` in `src/` (see `src/ruleset_en_4x4.c` for
+the shape), a line in `ruleset_select()` (`src/ruleset.c`) for the
+new (language, board_size) combination, add its own
+independently-transcribed reference table + a loop entry in
+`test_dice.c`'s `REF_TABLES[]` (with its own `max_q`/`max_z` if the
+new table's Q/Z placement differs from "exactly one die each" — see
+`ruleset_fr_5x5.c` for why that field exists), and cite the
+letter-distribution source in a comment — see `docs/i18n_plan_tier2.md`
+and `docs/board_size_5x5_plan.md` for why sourcing matters here (an
+unsourced dice table is a guess, not a documented game edition) and
+for the fallback pattern to follow if the new combination isn't fully
+sourced yet (see `test_ruleset.c`'s unknown-device-language case for
+a worked example of falling back rather than guessing).
 
 ## Links
 

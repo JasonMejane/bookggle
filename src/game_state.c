@@ -16,6 +16,10 @@ int CELL_SIZE, GRID_X, GRID_Y;
 int mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h;
 int quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h;
 int pause_btn_x, pause_btn_y, pause_btn_w, pause_btn_h;
+int submit_btn_x, submit_btn_y, submit_btn_w, submit_btn_h;
+int clear_btn_x, clear_btn_y, clear_btn_w, clear_btn_h;
+int newgame_btn_x, newgame_btn_y, newgame_btn_w, newgame_btn_h;
+int changemode_btn_x, changemode_btn_y, changemode_btn_w, changemode_btn_h;
 
 int board4_btn_x, board4_btn_y, board4_btn_w, board4_btn_h;
 int board5_btn_x, board5_btn_y, board5_btn_w, board5_btn_h;

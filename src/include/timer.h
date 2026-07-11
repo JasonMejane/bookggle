@@ -10,11 +10,15 @@ typedef enum
    TIMER_TICK_ENDED_MULTI
 } TimerTickResult;
 
-/* Starts the 1-tick-per-second timer. */
+/* Arms the timer for the next 1-second tick. SetHardTimer is one-shot,
+   so this is called both to start the timer and to re-arm it after
+   every tick that keeps the game running. */
 void game_timer_start(void);
 
-/* Ticks the timer, returns what happened. Draws nothing. No-op
-   (returns TIMER_TICK_RUNNING without decrementing time_left) while
+/* Ticks the timer, returns what happened. Draws nothing. Re-arms the
+   one-shot timer while the game keeps running (via game_timer_start),
+   and stops re-arming on the tick that ends the game. No-op on
+   time_left (returns TIMER_TICK_RUNNING without decrementing) while
    g.paused, same as while g.game_over -- the tick still happens on
    schedule, it just doesn't count down. */
 TimerTickResult game_timer_callback(int id);

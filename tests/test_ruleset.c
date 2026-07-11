@@ -3,7 +3,7 @@
    falls back to English for an unrecognized device language (at
    either board size), and never returns NULL (even before
    ruleset_select() is ever called).
-   Run: make test-ruleset (from tests/), or see tests/README.md. */
+   Run: make test-ruleset (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "ruleset.h"

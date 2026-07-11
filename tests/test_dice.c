@@ -18,7 +18,7 @@
    (here: 25 * 150 at most), so this can never happen regardless of
    how adversarial a given roll's letter arrangement is.
 
-   Run: make test-dice (from tests/), or see tests/README.md. */
+   Run: make test-dice (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "dice.h"

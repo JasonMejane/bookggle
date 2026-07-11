@@ -20,4 +20,9 @@ void stub_reset_update_counters(void);
 int stub_full_update_call_count(void);
 int stub_partial_update_call_count(void);
 
+/* Number of times SetHardTimer() has been called. Lets tests verify a
+   running tick re-arms the one-shot device timer (and an ending tick
+   does not). Reset by stub_reset_update_counters(). */
+int stub_hard_timer_call_count(void);
+
 #endif /* STUB_HOOKS_H */

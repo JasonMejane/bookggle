@@ -1,7 +1,5 @@
-/* French UI strings. See i18n.h.
-   Unaccented on purpose, matching this project's earlier French
-   revision -- avoids depending on accented-glyph coverage in
-   whatever font subset ships on a given device. */
+/* French UI strings. See i18n.h. Unaccented on purpose -- avoids
+   depending on accented-glyph coverage in the device's font subset. */
 
 #include "i18n.h"
 

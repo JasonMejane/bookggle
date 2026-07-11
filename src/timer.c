@@ -16,7 +16,10 @@ TimerTickResult game_timer_callback(int id)
         return TIMER_TICK_RUNNING;
 
     if (g.paused)
+    {
+        game_timer_start();
         return TIMER_TICK_RUNNING;
+    }
 
     g.time_left--;
 
@@ -33,5 +36,6 @@ TimerTickResult game_timer_callback(int id)
         return TIMER_TICK_ENDED_SOLO;
     }
 
+    game_timer_start();
     return TIMER_TICK_RUNNING;
 }

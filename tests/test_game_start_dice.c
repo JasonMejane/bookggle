@@ -1,6 +1,6 @@
 /* Checks game_start() really uses dice_roll_grid() under real
    conditions (not just dice.c in isolation).
-   Run: make test-integration (from tests/), or see tests/README.md. */
+   Run: make test-integration (from tests/), or see README.md. */
 
 #include "game_state.h"
 #include "game_logic.h"

@@ -20,14 +20,13 @@ void on_timer_tick(int id)
     switch (game_timer_callback(id))
     {
     case TIMER_TICK_RUNNING:
-        /* Only repaint the top HUD strip where the timer text lives.
-           This avoids a full-screen redraw while still forcing an
-           update for the e-ink screen. */
+        /* Repaint just the HUD strip that holds the timer text. */
         draw_hud();
-        PartialUpdate(0, 0, SW, SH / 5);
+        PartialUpdate(0, 0, SW, UI_HUD_H);
         break;
 
     case TIMER_TICK_ENDED_MULTI:
+        grid_game_over_blink();
         /* draw_multi_end() clears the screen itself. */
         draw_multi_end();
         FullUpdate();
@@ -36,6 +35,7 @@ void on_timer_tick(int id)
     case TIMER_TICK_ENDED_SOLO:
     {
         char msg[96];
+        grid_game_over_blink();
         const char *fmt = (g.score > 1)
                               ? i18n_str(STR_SCORE_FINAL_PLURAL)
                               : i18n_str(STR_SCORE_FINAL_SINGULAR);
