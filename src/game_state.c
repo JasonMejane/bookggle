@@ -6,6 +6,7 @@ GameState g;
 Screen cur_screen = SCREEN_MODE_SELECT;
 
 ifont *font_title = NULL;
+ifont *font_dice = NULL;
 ifont *font_large = NULL;
 ifont *font_medium = NULL;
 ifont *font_small = NULL;

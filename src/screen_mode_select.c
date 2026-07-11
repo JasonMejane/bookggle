@@ -33,10 +33,22 @@ void draw_mode_select(void)
 {
    FillArea(0, 0, SW, SH, WHITE);
 
-   int y = 90;
-   SetFont(font_title, BLACK);
-   DrawTextRect(0, y, SW, 56, "BOOKGGLE", ALIGN_CENTER);
-   y += 56 + 18;
+   /* Wordmark banner: an inverted (white-on-black) badge reads as a
+      logo lockup rather than a plain heading on e-ink. */
+   int banner_w = SW * 3 / 4;
+   int banner_x = (SW - banner_w) / 2;
+   int banner_h = 84;
+   int banner_border = 6;
+   int y = 70;
+
+   DrawRect(banner_x, y, banner_w, banner_h, BLACK);
+   FillArea(banner_x + banner_border, y + banner_border,
+            banner_w - 2 * banner_border, banner_h - 2 * banner_border,
+            BLACK);
+   SetFont(font_title, WHITE);
+   DrawTextRect(banner_x, y, banner_w, banner_h, "BOOKGGLE",
+                ALIGN_CENTER | VALIGN_MIDDLE);
+   y += banner_h + 18;
 
    SetFont(font_medium, BLACK);
    DrawTextRect(0, y, SW, 32, i18n_str(STR_CHOOSE_MODE), ALIGN_CENTER);
@@ -46,17 +58,17 @@ void draw_mode_select(void)
    int half = (SW * 2 / 3 - 16) / 2;
 
    row_y = draw_toggle_row(y, i18n_str(STR_BTN_MODE),
-                           i18n_str(STR_BTN_SOLO), selected_mode == MODE_SOLO,
                            i18n_str(STR_BTN_MULTIPLAYER), selected_mode == MODE_MULTI,
+                           i18n_str(STR_BTN_SOLO), selected_mode == MODE_SOLO,
                            &lx, &rx);
-   mode_solo_btn_x = lx;
-   mode_solo_btn_y = row_y;
-   mode_solo_btn_w = half;
-   mode_solo_btn_h = UI_TOGGLE_H;
-   mode_multi_btn_x = rx;
+   mode_multi_btn_x = lx;
    mode_multi_btn_y = row_y;
    mode_multi_btn_w = half;
    mode_multi_btn_h = UI_TOGGLE_H;
+   mode_solo_btn_x = rx;
+   mode_solo_btn_y = row_y;
+   mode_solo_btn_w = half;
+   mode_solo_btn_h = UI_TOGGLE_H;
    y = row_y + UI_TOGGLE_H + 40;
 
    /* Digits / "x" / times aren't prose, so kept as literals rather

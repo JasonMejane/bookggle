@@ -11,6 +11,11 @@ void game_reset_selection(void);
    (re)starts the timer. */
 void game_start(GameMode mode);
 
+/* Ends the in-progress game like a timeout would (stops the timer
+   from re-arming, see game_timer_callback), without switching screens
+   itself -- for when the player navigates away mid-game. */
+void game_cancel(void);
+
 /* "Qu" for a Q cell, single letter otherwise. */
 const char *cell_label(int row, int col);
 

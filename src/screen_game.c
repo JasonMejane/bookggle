@@ -30,22 +30,22 @@ void draw_hud(void)
                    i18n_str(g.paused ? STR_BTN_PLAY : STR_BTN_PAUSE),
                    0, font_small);
 
-    mode_btn_w = ctrl_w;
-    mode_btn_h = row_h;
-    mode_btn_x = SW - UI_MARGIN - ctrl_w;
-    mode_btn_y = row_y;
-    ui_draw_button(mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h,
-                   i18n_str(STR_BTN_MODE), 0, font_small);
-
     quit_btn_w = ctrl_w;
     quit_btn_h = row_h;
-    quit_btn_x = mode_btn_x - gap - ctrl_w;
+    quit_btn_x = SW - UI_MARGIN - ctrl_w;
     quit_btn_y = row_y;
     ui_draw_button(quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h,
                    i18n_str(STR_BTN_QUIT), 0, font_small);
 
+    mode_btn_w = ctrl_w;
+    mode_btn_h = row_h;
+    mode_btn_x = quit_btn_x - gap - ctrl_w;
+    mode_btn_y = row_y;
+    ui_draw_button(mode_btn_x, mode_btn_y, mode_btn_w, mode_btn_h,
+                   i18n_str(STR_BTN_MODE), 0, font_small);
+
     int title_x = pause_btn_x + pause_btn_w + gap;
-    int title_w = quit_btn_x - gap - title_x;
+    int title_w = mode_btn_x - gap - title_x;
     const char *title = i18n_str(g.mode == MODE_MULTI ? STR_HUD_TITLE_MULTI
                                                       : STR_HUD_TITLE_SOLO);
     SetFont(i18n_fit_font(title, title_w - UI_PAD, font_large), BLACK);
@@ -62,7 +62,7 @@ void draw_hud(void)
         char ss[32];
         snprintf(ss, sizeof(ss), i18n_str(STR_SCORE_LABEL), g.score);
         SetFont(font_small, BLACK);
-        DrawTextRect(0, timer_y + 52, SW, 26, ss, ALIGN_CENTER);
+        DrawTextRect(0, timer_y + 52 + 6, SW, 26, ss, ALIGN_CENTER);
     }
 
     DrawLine(0, UI_HUD_H - 2, SW, UI_HUD_H - 2, BLACK);
@@ -105,11 +105,9 @@ void draw_grid(void)
             /* Shrink to fit: at 5x5 even one letter (or "Qu") can be
                tight in a cell. */
             const char *lbl = cell_label(r, c);
-            SetFont(i18n_fit_font(lbl, CELL_SIZE - 8, font_large), BLACK);
-
-            int lw = StringWidth(lbl);
-            DrawString(x + (CELL_SIZE - lw) / 2,
-                       y + (CELL_SIZE - 30) / 2, lbl);
+            SetFont(i18n_fit_font(lbl, CELL_SIZE - 8, font_dice), BLACK);
+            DrawTextRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4, lbl,
+                         ALIGN_CENTER | VALIGN_MIDDLE);
         }
     }
 }

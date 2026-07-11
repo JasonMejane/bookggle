@@ -1,4 +1,5 @@
 #include "game_state.h"
+#include "game_logic.h"
 #include "timer.h"
 #include "screen_game.h"
 #include "ui_fonts.h"
@@ -47,6 +48,21 @@ int main(void)
     stub_reset_update_counters();
     on_timer_tick(0);
     assert(g.game_over == 1);
+    assert(stub_hard_timer_call_count() == 0);
+
+    /* Navigating away mid-game (e.g. the Mode button) must cancel the
+       game like a timeout would: the already-armed tick that follows
+       must not re-arm the timer, so it can't keep ticking (and
+       redrawing the HUD) behind the mode-select screen. */
+    g.time_left = 42;
+    g.game_over = 0;
+    cur_screen = SCREEN_GAME;
+    game_cancel();
+    cur_screen = SCREEN_MODE_SELECT;
+    stub_reset_update_counters();
+    on_timer_tick(0);
+    assert(g.game_over == 1);
+    assert(g.time_left == 42); /* not decremented once canceled */
     assert(stub_hard_timer_call_count() == 0);
 
     printf("=== TIMER REFRESH TESTS PASSED ===\n\n");

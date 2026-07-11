@@ -24,7 +24,7 @@ typedef enum
    MODE_SOLO = 0,
    MODE_MULTI = 1
 } GameMode;
-#define DEFAULT_MODE MODE_SOLO
+#define DEFAULT_MODE MODE_MULTI
 
 typedef enum
 {
@@ -54,6 +54,7 @@ extern GameState g;
 extern Screen cur_screen;
 
 extern ifont *font_title;
+extern ifont *font_dice;
 extern ifont *font_large;
 extern ifont *font_medium;
 extern ifont *font_small;

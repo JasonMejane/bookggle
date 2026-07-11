@@ -35,6 +35,11 @@ void game_start(GameMode mode)
     game_timer_start();
 }
 
+void game_cancel(void)
+{
+    g.game_over = 1;
+}
+
 const char *cell_label(int r, int c)
 {
     static char buf[4];

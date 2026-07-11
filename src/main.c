@@ -20,9 +20,15 @@ void on_timer_tick(int id)
     switch (game_timer_callback(id))
     {
     case TIMER_TICK_RUNNING:
-        /* Repaint just the HUD strip that holds the timer text. */
-        draw_hud();
-        PartialUpdate(0, 0, SW, UI_HUD_H);
+        /* Repaint just the HUD strip that holds the timer text. Skip
+           if the player has since navigated away (e.g. game_cancel()
+           via the Mode button) -- this is the one straggler tick
+           already armed before that happened. */
+        if (cur_screen == SCREEN_GAME)
+        {
+            draw_hud();
+            PartialUpdate(0, 0, SW, UI_HUD_H);
+        }
         break;
 
     case TIMER_TICK_ENDED_MULTI:

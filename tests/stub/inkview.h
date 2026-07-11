@@ -26,6 +26,7 @@ typedef void (*iv_timer_handler)(int);
 
 #define ALIGN_CENTER 0
 #define ALIGN_LEFT 1
+#define VALIGN_MIDDLE 32
 
 #define ICON_INFORMATION 0
 #define ICON_WARNING 1

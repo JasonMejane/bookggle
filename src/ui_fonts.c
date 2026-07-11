@@ -10,13 +10,14 @@ void ui_draw_button(int x, int y, int w, int h,
     FillArea(x, y, w, h, filled ? BLACK : WHITE);
     DrawRect(x, y, w, h, BLACK);
     SetFont(i18n_fit_font(label, w - UI_PAD, preferred), filled ? WHITE : BLACK);
-    DrawTextRect(x, y, w, h, label, ALIGN_CENTER);
+    DrawTextRect(x, y, w, h, label, ALIGN_CENTER | VALIGN_MIDDLE);
 }
 
 void fonts_load(void)
 {
     /* Bold face at large sizes for e-ink legibility. */
-    font_title = OpenFont("LiberationSans-Bold", 48, 1);
+    font_title = OpenFont("LiberationSans-Bold", 64, 1);
+    font_dice = OpenFont("LiberationSans-Bold", 108, 1); /* 3x font_large */
     font_large = OpenFont("LiberationSans-Bold", 36, 1);
     font_medium = OpenFont("LiberationSans-Bold", 28, 1);
     font_small = OpenFont("LiberationSans-Bold", 20, 1);
@@ -28,6 +29,12 @@ void fonts_free(void)
     {
         CloseFont(font_title);
         font_title = NULL;
+    }
+
+    if (font_dice)
+    {
+        CloseFont(font_dice);
+        font_dice = NULL;
     }
 
     if (font_large)

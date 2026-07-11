@@ -83,10 +83,10 @@ const char *i18n_str(StringKey key)
 
 ifont *i18n_fit_font(const char *text, int box_w, ifont *preferred)
 {
-    ifont *ladder[3] = {font_large, font_medium, font_small};
-    int start = 2;
+    ifont *ladder[4] = {font_dice, font_large, font_medium, font_small};
+    int start = 3;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
     {
         if (ladder[i] == preferred)
         {
@@ -95,7 +95,7 @@ ifont *i18n_fit_font(const char *text, int box_w, ifont *preferred)
         }
     }
 
-    for (int i = start; i < 3; i++)
+    for (int i = start; i < 4; i++)
     {
         SetFont(ladder[i], BLACK);
         if (StringWidth(text) <= box_w)

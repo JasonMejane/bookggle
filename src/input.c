@@ -100,6 +100,7 @@ static void handle_tap_game(int tx, int ty)
     if (tx >= mode_btn_x && tx <= mode_btn_x + mode_btn_w &&
         ty >= mode_btn_y && ty <= mode_btn_y + mode_btn_h)
     {
+        game_cancel();
         cur_screen = SCREEN_MODE_SELECT;
         draw_mode_select();
         return;
@@ -162,6 +163,7 @@ void input_handle_keypress(int key)
 
     if (cur_screen == SCREEN_GAME || cur_screen == SCREEN_MULTI_END)
     {
+        game_cancel();
         cur_screen = SCREEN_MODE_SELECT;
         draw_mode_select();
     }
