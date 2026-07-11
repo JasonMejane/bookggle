@@ -119,7 +119,8 @@ void draw_mode_select(void)
    y += timer_h + 50;
 
    /* --- Start --- */
-   int start_w = SW * 2 / 3, start_h = 64;
+   int start_w = SW * 2 / 3;
+   int start_h = 64;
    int start_x = (SW - start_w) / 2;
 
    start_btn_x = start_x;
@@ -136,16 +137,15 @@ void draw_mode_select(void)
    /* Quit button placed beneath Start so the mode-select screen has
       a clear exit path without leaving the current screen layout. */
    quit_btn_x = start_x;
-   quit_btn_y = y + start_h + 16;
+   quit_btn_y = y + start_h + 24;
    quit_btn_w = start_w;
-   quit_btn_h = 48;
+   quit_btn_h = start_h;
 
    FillArea(quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h, BLACK);
    DrawRect(quit_btn_x, quit_btn_y, quit_btn_w, quit_btn_h, BLACK);
    const char *quit_label = i18n_str(STR_BTN_QUIT);
    SetFont(i18n_fit_font(quit_label, quit_btn_w - 20, font_medium), WHITE);
-   DrawTextRect(quit_btn_x, quit_btn_y + 6, quit_btn_w, quit_btn_h,
-                quit_label, ALIGN_CENTER);
+   DrawTextRect(quit_btn_x, quit_btn_y + 10, quit_btn_w, quit_btn_h, quit_label, ALIGN_CENTER);
 
    FullUpdate();
 }

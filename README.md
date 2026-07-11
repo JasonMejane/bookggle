@@ -476,11 +476,11 @@ Place these two files in the device's applications icons area, for example:
 #### Step 2: Edit `view.json`
 
 1. Connect the PocketBook by USB.
-2. Enable hidden files in your file manager and open `/.system/config/desktop/view.json`.
+2. Enable hidden files in your file manager and open `/system/config/desktop/view.json`.
 3. Add a user-app entry using the `U_` prefix, where the suffix must match the app filename without the `.app` extension:
 
 ```json
-"U_bookggle": {
+"U_Bookggle": {
     "path": "/mnt/ext1/applications/bookggle.app",
     "title": "Bookggle",
     "icon": "/mnt/ext1/applications/icons/bookggle.bmp",
@@ -493,7 +493,7 @@ Place these two files in the device's applications icons area, for example:
 In the same `view.json` file, add your entry to the visible apps array, for example:
 
 ```json
-"apps": [ "PB_Dictionary", "PB_Library", "PB_Settings", "U_bookggle" ]
+"apps": [ "PB_Dictionary", "PB_Library", "PB_Settings", "U_Bookggle" ]
 ```
 
 #### Step 4: Reboot
